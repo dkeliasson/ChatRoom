@@ -31,6 +31,8 @@ public class ServerMain extends Observable {
 		}
 	}
 
+	
+	
 	private void setUpNetworking() throws Exception {
 		@SuppressWarnings("resource")
 		ServerSocket serverSock = new ServerSocket(4242);
@@ -40,9 +42,12 @@ public class ServerMain extends Observable {
 			Thread t = new Thread(new ClientHandler(clientSocket));
 			t.start();
 			this.addObserver(writer);
-			System.out.println("got a connection");
+			System.out.println("Connection Made");
 		}
 	}
+	
+	
+	
 	class ClientHandler implements Runnable {
 		private BufferedReader reader;
 
