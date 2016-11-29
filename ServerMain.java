@@ -27,10 +27,13 @@ import java.util.Map;
 import java.util.Observable;
 
 import assignment7.ClientMain;
+import javafx.scene.control.Label;
+import javafx.stage.Stage;
 
 
 public class ServerMain extends Observable {
 	private Map<ClientObserver, Socket> observers = new HashMap<ClientObserver, Socket>();
+	
 	
 	public static void main(String[] args) {
 		try {
@@ -58,9 +61,21 @@ public class ServerMain extends Observable {
 			writer.setUser(name);
 			System.out.println(writer.getUser());
 			
-			Thread t = new Thread(new ClientHandler(clientSocket));
+			Thread t = new Thread(new ClientHandler(clientSocket, writer.getUser()));
 			t.start();
 			this.addObserver(writer);
+			
+			// Add user to peeps stage for clients to see
+			Label user = new Label(writer.getUser());
+			
+			
+			
+			// Notify all that user has logged in
+			String login = new String(writer.getUser() + " has logged in!");
+			
+			setChanged();
+			notifyObservers(login);
+			
 			//observers.put(writer, clientSocket);
 			System.out.println("Connection Made");
 		}
@@ -70,9 +85,11 @@ public class ServerMain extends Observable {
 	
 	class ClientHandler implements Runnable {
 		private BufferedReader reader;
+		private String user;
 
-		public ClientHandler(Socket clientSocket) {
+		public ClientHandler(Socket clientSocket, String user) {
 			Socket sock = clientSocket;
+			this.user = user;
 			try {
 				reader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 			} catch (IOException e) {
@@ -86,7 +103,7 @@ public class ServerMain extends Observable {
 				while ((message = reader.readLine()) != null) {
 					System.out.println("Server read "+ message);
 					setChanged();
-					notifyObservers(message);
+					notifyObservers(user + ": " + message);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

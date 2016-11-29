@@ -50,7 +50,7 @@ public class ClientObserver extends PrintWriter implements Observer {
 	
 	@Override
 	public void update(Observable o, Object arg) {
-		this.println(userName + ": " + arg); //writer.println(arg);
+		this.println(arg); //writer.println(arg);
 		this.flush(); //writer.flush();
 	}
 
