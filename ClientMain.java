@@ -34,7 +34,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage; 
 
 
-public class ClientMain extends Application { 
+public class ClientMain extends Application{ 
 	private Stage begin;
 	private Stage chat;
 	private BorderPane bottomPane;
@@ -54,7 +54,7 @@ public class ClientMain extends Application {
 		user();
 		
 		// Create a scene and place it in the stage 
-		Scene scene = new Scene(getUser, 450, 200); 
+		Scene scene = new Scene(getUser, 200, 100); 
 		begin.setTitle("User"); // Set the stage title 
 		begin.setScene(scene); // Place the scene in the stage 
 		begin.show(); // Display the stage 
@@ -64,6 +64,7 @@ public class ClientMain extends Application {
 	private void user(){
 		/* Set text field for user name */
 		TextField get_name = new TextField();
+		getUser.setAlignment(get_name, Pos.CENTER);
 		getUser.setCenter(get_name);
 		
 		/* Set a button to set info */
@@ -75,7 +76,7 @@ public class ClientMain extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				// get the name and store in private string
-				user = get_name.getText();
+				setUser(get_name.getText());
 				
 				// Setup stage
 				chat = new Stage();
@@ -130,6 +131,7 @@ public class ClientMain extends Application {
 		TextField tf = new TextField();
 		bottomPane.setTop(tf);
 		
+		
 		/* Set a button to set the input */
 		Button send = new Button("Send");
 		bottomPane.setBottom(send);
@@ -147,6 +149,18 @@ public class ClientMain extends Application {
 		});
 	}
 		
+	
+	
+	public String getUser() {
+		return user;
+	}
+
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+	
+	
 
 	
 	class IncomingReader implements Runnable {
@@ -154,7 +168,7 @@ public class ClientMain extends Application {
 			String message;
 			try {
 				while ((message = reader.readLine()) != null) {
-					
+						
 						ta.appendText(message + "\n");
 				}
 			} catch (IOException ex) {
@@ -172,7 +186,12 @@ public class ClientMain extends Application {
 		InputStreamReader streamReader = new InputStreamReader(sock.getInputStream());
 		reader = new BufferedReader(streamReader);
 		writer = new PrintWriter(sock.getOutputStream());
-		System.out.println("networking established");
+		
+		//send user name to server
+        writer.println(user);
+        writer.flush();
+        
+		System.out.println("Networking Established");
 		Thread readerThread = new Thread(new IncomingReader());
 		readerThread.start();
 	}
@@ -182,6 +201,9 @@ public class ClientMain extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
+
+
+	
 }
 
 
