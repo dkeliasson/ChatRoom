@@ -32,7 +32,7 @@ import javafx.stage.Stage;
 
 
 public class ServerMain extends Observable {
-	private Map<ClientObserver, Socket> observers = new HashMap<ClientObserver, Socket>();
+	public static Map<String, Socket> observers = new HashMap<String, Socket>();
 	
 	
 	public static void main(String[] args) {
@@ -56,6 +56,12 @@ public class ServerMain extends Observable {
 			String name = getUser.readLine();
 			
 			ClientObserver writer = new ClientObserver(clientSocket.getOutputStream());
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			// NEW CODE
+			observers.put(name, clientSocket);
+			
+			
+			
 			
 			// Set username
 			writer.setUser(name);
@@ -66,7 +72,7 @@ public class ServerMain extends Observable {
 			this.addObserver(writer);
 			
 			// Add user to peeps stage for clients to see
-			Label user = new Label(writer.getUser());
+			//Label user = new Label(writer.getUser());
 			
 			
 			
