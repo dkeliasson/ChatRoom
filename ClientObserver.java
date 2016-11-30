@@ -50,7 +50,43 @@ public class ClientObserver extends PrintWriter implements Observer {
 	
 	@Override
 	public void update(Observable o, Object arg) {
-		this.println(arg); //writer.println(arg);
+		
+		
+		
+		
+		
+		String text = arg.toString();
+		int index = text.indexOf('@');
+		//int index2 = text.indexOf(':');
+		
+		if(index == -1){
+			this.println(arg);
+		}
+		else{
+			String substring1 = ":";
+			String[] parts1 = text.split(substring1);
+			String txName = parts1[0];
+
+			
+			
+			String substring2 = "@";
+			String[] parts2 = text.split(substring2);
+			String subText = parts2[0];
+			String rxName = parts2[1];
+			
+			
+			if(ServerMain.observers.containsKey(rxName)){
+			
+				if(rxName.equals(this.userName) || txName.equals(this.userName)){
+					this.println(subText);
+				}
+			}
+			else{
+				this.println(arg);
+			}
+		}
+		
+		//this.println(arg); //writer.println(arg);
 		this.flush(); //writer.flush();
 	}
 
