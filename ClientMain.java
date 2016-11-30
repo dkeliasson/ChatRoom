@@ -137,7 +137,7 @@ public class ClientMain extends Application{
 				
 				// Create scenes and place in the stages 
 				Scene scene = new Scene(chat_pane, 450, 200); 
-				chat.setTitle("Chat Room");  
+				chat.setTitle(getUser());  
 				chat.setScene(scene); 
 				chat.show();
 				Scene scene2 = new Scene(people_pane, 180, 300);
